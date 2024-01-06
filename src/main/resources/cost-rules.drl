@@ -3,43 +3,48 @@ global  com.mynt.model.ComputedCost computedCost;
 
 dialect "mvel"
 
-rule "Reject" salience 5
+rule "Large Parcel" salience 5
     when
-        ParcelData(weightKg > 50)
+        ParcelData($volume: volume >= 2500)
     then
-        System.out.println(">> Parcel rejected. Weight exceeds 50kg");
-        computedCost.setRejected(true);
-        computedCost.setCost(0.0);
+        computedCost.setType("Large Parcel");
+        // PHP0.05/cm3
+        computedCost.setCost($volume * .05);
 end
 
-rule "Heavy Parcel" salience 4
+rule "Medium Parcel" salience 4
     when
-        ParcelData($weightKg: weightKg > 10)
+        ParcelData($volume: volume < 2500)
     then
-        System.out.println(">> Heavy Parcel. Weight exceeds 10kg. PHP20/kg");
-        computedCost.setCost($weightKg * 20);
+        computedCost.setType("Medium Parcel");
+        // Volume is less than 2500 cm3. PHP0.04/cm3
+        computedCost.setCost($volume * .04);
 end
 
 rule "Small Parcel" salience 3
     when
         ParcelData($volume: volume < 1500)
     then
-        System.out.println(">> Small Parcel. Volume is less than 1500 cm3. PHP0.03/cm3");
+        computedCost.setType("Small Parcel");
+        // Volume is less than 1500 cm3. PHP0.03/cm3
         computedCost.setCost($volume * .03);
 end
 
-rule "Medium Parcel" salience 2
+rule "Heavy Parcel" salience 2
     when
-        ParcelData($volume: volume < 2500)
+        ParcelData($weightKg: weightKg > 10)
     then
-        System.out.println(">> Medium Parcel. Volume is less than 2500 cm3. PHP0.04/cm3");
-        computedCost.setCost($volume * .04);
+        computedCost.setType("Heavy Parcel");
+        // Weight exceeds 10kg. PHP20/kg
+        computedCost.setCost($weightKg * 20);
 end
 
-rule "Large Parcel" salience 1
+rule "Reject" salience 1
     when
-        ParcelData($volume: volume >= 2500)
+        ParcelData(weightKg > 50)
     then
-        System.out.println(">> Large Parcel. PHP0.05/cm3");
-        computedCost.setCost($volume * .05);
+        computedCost.setType("Rejected Parcel");
+        // Weight exceeds 50kg
+        computedCost.setRejected(true);
+        computedCost.setCost(0.0);
 end

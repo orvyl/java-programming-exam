@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Service
@@ -50,10 +51,23 @@ public class ParcelService {
     private ComputedCost computeCostWithVoucher(String voucherCode, ComputedCost computedCost) throws VoucherException {
         try {
             Voucher voucher = restTemplate.getForObject(String.format(voucherUrl, voucherCode), Voucher.class);
+            /*
+             * for offline voucher service
+
+            Voucher voucher = new Voucher();
+            voucher.setDiscount(1.0);
+            voucher.setExpiry(LocalDate.now().minusDays(3));
+            voucher.setCode(voucherCode);
+             */
 
             assert voucher != null;
-            computedCost.setDiscount(voucher.getDiscount());
-            computedCost.setCost(computedCost.getCost() - voucher.getDiscount());
+            computedCost.setVoucher(voucher);
+
+            LocalDate now = LocalDate.now();
+            LocalDate expiryDate = voucher.getExpiry();
+            if (!expiryDate.isBefore(now)) {
+                computedCost.setCostWithDiscount(computedCost.getCost() - voucher.getDiscount());
+            }
 
             return computedCost;
         } catch (HttpClientErrorException ex) {
