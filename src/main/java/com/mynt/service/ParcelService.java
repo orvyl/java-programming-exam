@@ -50,7 +50,8 @@ public class ParcelService {
 
     private ComputedCost computeCostWithVoucher(String voucherCode, ComputedCost computedCost) throws VoucherException {
         try {
-            Voucher voucher = restTemplate.getForObject(String.format(voucherUrl, voucherCode), Voucher.class);
+            String formattedUrl = String.format(voucherUrl, voucherCode);
+            Voucher voucher = restTemplate.getForObject(formattedUrl, Voucher.class);
             /*
              * for offline voucher service
 
@@ -70,8 +71,8 @@ public class ParcelService {
             }
 
             return computedCost;
-        } catch (HttpClientErrorException ex) {
-            throw new VoucherException("Failed to retrieve voucher: " + voucherCode + ". " + ex.getStatusText(), ex);
+        } catch (Exception ex) {
+            throw new VoucherException("Failed to retrieve voucher.", ex);
         }
     }
 }
