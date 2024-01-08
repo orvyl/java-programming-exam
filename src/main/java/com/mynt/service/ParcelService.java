@@ -4,16 +4,17 @@ import com.mynt.VoucherException;
 import com.mynt.model.ComputedCost;
 import com.mynt.model.ParcelData;
 import com.mynt.model.Voucher;
+import lombok.extern.slf4j.Slf4j;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Slf4j
 @Service
 public class ParcelService {
 
@@ -57,8 +58,9 @@ public class ParcelService {
 
             Voucher voucher = new Voucher();
             voucher.setDiscount(1.0);
-            voucher.setExpiry(LocalDate.now().minusDays(3));
+            voucher.setExpiry(LocalDate.now().plusDays(10));
             voucher.setCode(voucherCode);
+
              */
 
             assert voucher != null;
@@ -66,8 +68,10 @@ public class ParcelService {
 
             LocalDate now = LocalDate.now();
             LocalDate expiryDate = voucher.getExpiry();
+
+
             if (!expiryDate.isBefore(now)) {
-                computedCost.setCostWithDiscount(computedCost.getCost() - voucher.getDiscount());
+                computedCost.setCost(computedCost.getCost() - voucher.getDiscount());
             }
 
             return computedCost;

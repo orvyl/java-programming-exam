@@ -1,15 +1,19 @@
 package com.mynt;
 
+import io.cucumber.spring.CucumberContextConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
-//@SpringBootTest
-class ApplicationTests {
+@SpringBootTest
+@CucumberContextConfiguration
+public class ApplicationTests {
 
-    @Test
-    void contextLoads() {
-//        String boom = null;
-//        System.out.println(boom.isBlank());
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
+        return restTemplateBuilder.build();
     }
 
 }

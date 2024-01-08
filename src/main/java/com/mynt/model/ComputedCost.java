@@ -11,9 +11,6 @@ public class ComputedCost {
     private String type;
     private Double cost;
     private Double volume;
-
-    @JsonProperty(value = "cost_with_discount")
-    private Double costWithDiscount;
     private Voucher voucher;
 
     @JsonIgnore

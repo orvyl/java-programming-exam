@@ -6,6 +6,7 @@ import com.mynt.model.ComputedCost;
 import com.mynt.model.ParcelData;
 import com.mynt.service.ParcelService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
@@ -21,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("parcel")
+@Slf4j
 public class ParcelController {
 
     private final ParcelService parcelService;
@@ -35,6 +37,7 @@ public class ParcelController {
     private ComputedCost computeCost(
             @RequestBody @Valid ParcelData parcelData,
             @RequestParam(name = "voucher-code", required = false) String voucherCode) throws VoucherException {
+        log.info("Received request: data:{}. voucher:{}", parcelData, voucherCode);
         return parcelService.computeParcelCost(parcelData, voucherCode);
     }
 

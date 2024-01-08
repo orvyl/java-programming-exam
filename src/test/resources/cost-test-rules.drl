@@ -1,0 +1,50 @@
+import com.mynt.model.ParcelData;
+global  com.mynt.model.ComputedCost computedCost;
+
+dialect "mvel"
+
+rule "Large Parcel" salience 5
+    when
+        ParcelData($volume: volume >= 2500)
+    then
+        computedCost.setType("Large Parcel");
+        // PHP0.05/cm3
+        computedCost.setCost($volume * .05);
+end
+
+rule "Medium Parcel" salience 4
+    when
+        ParcelData($volume: volume < 2500)
+    then
+        computedCost.setType("Medium Parcel");
+        // Volume is less than 2500 cm3. PHP0.04/cm3
+        computedCost.setCost($volume * .04);
+end
+
+rule "Small Parcel" salience 3
+    when
+        ParcelData($volume: volume < 1500)
+    then
+        computedCost.setType("Small Parcel");
+        // Volume is less than 1500 cm3. PHP0.03/cm3
+        computedCost.setCost($volume * .03);
+end
+
+rule "Heavy Parcel" salience 2
+    when
+        ParcelData($weightKg: weightKg > 10)
+    then
+        computedCost.setType("Heavy Parcel");
+        // Weight exceeds 10kg. PHP20/kg
+        computedCost.setCost($weightKg * 20);
+end
+
+rule "Reject" salience 1
+    when
+        ParcelData(weightKg > 50)
+    then
+        computedCost.setType("Rejected Parcel");
+        // Weight exceeds 50kg
+        computedCost.setRejected(true);
+        computedCost.setCost(0.0);
+end
