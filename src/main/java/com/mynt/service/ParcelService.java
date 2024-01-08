@@ -46,6 +46,7 @@ public class ParcelService {
             return computedCost;
         }
 
+        log.info("======");
         return computeCostWithVoucher(voucherCode, computedCost);
     }
 
@@ -60,7 +61,6 @@ public class ParcelService {
             voucher.setDiscount(1.0);
             voucher.setExpiry(LocalDate.now().plusDays(10));
             voucher.setCode(voucherCode);
-
              */
 
             assert voucher != null;

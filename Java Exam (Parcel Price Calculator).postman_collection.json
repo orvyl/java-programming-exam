@@ -1,0 +1,74 @@
+{
+	"info": {
+		"_postman_id": "26f195b6-dcb0-4bf1-8cc2-838a0f5c6d74",
+		"name": "Java Exam (Parcel Price Calculator)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14511315"
+	},
+	"item": [
+		{
+			"name": "Without Discount",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"weight_kg\": 40,\r\n    \"height_cm\": 4,\r\n    \"width_cm\": 4,\r\n    \"length_cm\": 7\r\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/parcel/cost",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcel",
+						"cost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "With Discount",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"weight_kg\": 40,\r\n    \"height_cm\": 4,\r\n    \"width_cm\": 4,\r\n    \"length_cm\": 7\r\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/parcel/cost?voucher-code=mynt",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcel",
+						"cost"
+					],
+					"query": [
+						{
+							"key": "voucher-code",
+							"value": "mynt"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
